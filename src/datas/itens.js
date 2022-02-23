@@ -12,13 +12,23 @@ export default [
         quantidade: 2,
         valorUnitario: 6.00,
         valorTotal: 12.00,
-        carrinho: true},
+        carrinho: true
+    },
 
-        {
-            descricao: 'Saco de Lixo',
-            quantidade: 2,
-            valorUnitario: 6.00,
-            valorTotal: 12.00,
-            carrinho: false}
+    {
+        descricao: 'Saco de Lixo',
+        quantidade: 2,
+        valorUnitario: 6.00,
+        valorTotal: 12.00,
+        carrinho: false
+    },
+
+    {
+        descricao: 'Agua',
+        quantidade: 2,
+        valorUnitario: 2.00,
+        valorTotal: 4.00,
+        carrinho: false
+    }
 
 ]
