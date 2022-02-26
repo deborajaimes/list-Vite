@@ -27,7 +27,8 @@
           />
         </div>
         <div class="lg:ml-40 ml-10 space-x-8">
-          <button
+         <router-link to="/lista">
+            <button
             class="
               bg-indigo-600
               px-4
@@ -41,6 +42,7 @@
           >
             Novo Item
           </button>
+         </router-link>
         </div>
       </div>
     </div>
@@ -128,7 +130,7 @@
               name="carrinho"
               id="carrinho"
               :checked="item.carrinho"
-              @change="calcularTotalCarrinho()"
+              @change="alterarCarrinho(item)"
             />
           </td>
         </tr>
@@ -202,6 +204,7 @@ export default {
     async buscarItem() {
       let resposta = await axios.get(import.meta.env.VITE_APP_API_URL + "/item");
       this.lista = resposta.data;
+      this.calcularTotalCarrinho();
     },
 
     calcularTotalCarrinho() {
@@ -213,6 +216,10 @@ export default {
         })
         .reduce((anterior, atual) => anterior + atual);
     },
+   async alterarCarrinho(item){
+       console.log("teste "+item._id) 
+       await axios.put(import.meta.env.VITE_APP_API_URL + "/item/"+ item._id);
+    }
   },
   mounted() {
    this.buscarItem();
