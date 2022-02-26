@@ -181,7 +181,7 @@
             tracking-wider
           "
         >
-           {{ resultadoTotalCarrinho }}
+          {{ resultadoTotalCarrinho }}
         </th>
       </tr>
     </thead>
@@ -190,40 +190,43 @@
 
 <script>
 import axios from "axios";
-import itens from "./../datas/itens";
+
 export default {
   data() {
     return {
       lista: [],
-      resultadoTotalCarrinho:0,
+      resultadoTotalCarrinho: 0,
     };
   },
   methods: {
     async buscarItem() {
-      // let resposta = await axios.get("http://localhost/3001/lista");
-      this.lista = itens;
+      let resposta = await axios.get(import.meta.env.VITE_APP_API_URL + "/item");
+      this.lista = resposta.data;
     },
-    
-     calcularTotalCarrinho() {
-       console.log("OLA")
-      if (this.lista.length <= 0) this.resultadoTotalCarrinho = 0
+
+    calcularTotalCarrinho() {
+      console.log("OLA");
+      if (this.lista.length <= 0) this.resultadoTotalCarrinho = 0;
       this.resultadoTotalCarrinho = this.lista
-        .map((el) =>  {return el.carrinho ? el.valorTotal: 0 })
+        .map((el) => {
+          return el.carrinho ? el.valorTotal : 0;
+        })
         .reduce((anterior, atual) => anterior + atual);
     },
   },
-   
+  mounted() {
+   this.buscarItem();
+  },
   computed: {
     totalGeral() {
-      if (this.lista.length <= 0) return 0
+      if (this.lista.length <= 0) return 0;
       return this.lista
         .map((el) => el.valorTotal)
         .reduce((anterior, atual) => anterior + atual);
     },
-    totalCarrinho(){
-      return this.resultadoTotalCarrinho
-    }
-
+    totalCarrinho() {
+      return this.resultadoTotalCarrinho;
+    },
   },
 };
 </script>
