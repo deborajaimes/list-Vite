@@ -212,10 +212,7 @@ export default {
         .reduce((anterior, atual) => anterior + atual);
     },
   },
-  mounted() {
-    this.buscarItem();
-    this.calcularTotalCarrinho();
-  },
+   
   computed: {
     totalGeral() {
       if (this.lista.length <= 0) return 0

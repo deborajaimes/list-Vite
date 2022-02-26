@@ -45,7 +45,7 @@
     >
       Cadastrar
     </button>
-    <button class="bg-red-400 px-4 rounded-md text-white" type="button">
+    <button @click="cancelar" class="bg-red-400 px-4 rounded-md text-white" type="button" >
       Cancelar
     </button>
   </form>
@@ -66,6 +66,20 @@ export default {
         this.item
       );
       alert(resp.data.mensagem);
+    },
+    calcularTotal() {
+      this.item.valorTotal = this.item.valorUnitario * this.item.quantidade;
+    },
+    cancelar() {
+      this.item = {};
+    },
+  },
+  watch: {
+    "item.valorUnitario": function () {
+      this.calcularTotal();
+    },
+    "item.quantidade": function () {
+      this.calcularTotal();
     },
   },
 };
