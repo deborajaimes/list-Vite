@@ -46,7 +46,7 @@ export default {
     async adicionarUsuario() {
       const resp = await axios.post(
         import.meta.env.VITE_APP_API_URL + "/usuario",
-        this.item
+        this.usuario
       );
       alert(resp.data.mensagem);
     },

@@ -4,6 +4,7 @@
     <div>
       <router-link to="/home" class="mx-2 text-white">home</router-link>
       <router-link to="/lista" class="mx-2 text-white">Cadastrar Item</router-link>
+      <router-link to="/cadastro" class="mx-2 text-white">Cadastrar Usuario</router-link>
     </div>
   </nav>
   <router-view></router-view>
