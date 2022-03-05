@@ -27,22 +27,23 @@
           />
         </div>
         <div class="lg:ml-40 ml-10 space-x-8">
-         <router-link to="/lista">
+          <router-link to="/lista">
             <button
-            class="
-              bg-indigo-600
-              px-4
-              py-2
-              rounded-md
-              text-white
-              font-semibold
-              tracking-wide
-              cursor-pointer
-            "
-          >
-            Novo Item
-          </button>
-         </router-link>
+              class="
+                bg-indigo-500
+                px-4
+                py-2
+                rounded-md
+                text-white
+                font-semibold
+                tracking-wide
+                cursor-pointer
+                mdi mdi-cart-plus
+              "
+            >
+              Novo Item
+            </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -111,6 +112,34 @@
           >
             carrinho
           </th>
+           <th
+            class="
+              px-5
+              py-3
+              border-b-2 border-gray-200
+              bg-gray-100
+              text-left text-xs
+              font-semibold
+              text-gray-600
+              uppercase
+              tracking-wider
+            "
+          >
+          </th>
+            <th
+            class="
+              px-5
+              py-3
+              border-b-2 border-gray-200
+              bg-gray-100
+              text-left text-xs
+              font-semibold
+              text-gray-600
+              uppercase
+              tracking-wider
+            "
+          >
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -132,6 +161,14 @@
               :checked="item.carrinho"
               @change="alterarCarrinho(item)"
             />
+          </td>
+          <td>
+            <button @click="remover(item._id)" class="mdi mdi-delete-forever text-red-400 hover:text-red-500 focus:text-red-500">
+              Excluir
+            </button>
+          </td>
+          <td>
+            <button class="mdi mdi-table-edit text-indigo-400 hover:text-indigo-500 focus:text-indigo-500">Editar</button>
           </td>
         </tr>
       </tbody>
@@ -155,7 +192,20 @@
         >
           Valor Total Geral:
         </th>
-        <th class="px-5 font-semibold text-gray-600 uppercase tracking-wider">
+        <th
+          class="
+            px-5
+            py-3
+            border-b-2 border-gray-200
+            bg-gray-100
+            text-left 
+            font-semibold
+            text-gray-600
+            uppercase
+            tracking-wider
+            text-lg
+          "
+        >
           {{ totalGeral }}
         </th>
         <th
@@ -175,8 +225,11 @@
         </th>
         <th
           class="
-            text-left
-            px-5
+             px-5
+            py-3
+            border-b-2 border-gray-200
+            bg-gray-100
+            text-left text-lg
             font-semibold
             text-gray-600
             uppercase
@@ -202,7 +255,9 @@ export default {
   },
   methods: {
     async buscarItem() {
-      let resposta = await axios.get(import.meta.env.VITE_APP_API_URL + "/item");
+      let resposta = await axios.get(
+        import.meta.env.VITE_APP_API_URL + "/item"
+      );
       this.lista = resposta.data;
       this.calcularTotalCarrinho();
     },
@@ -216,13 +271,18 @@ export default {
         })
         .reduce((anterior, atual) => anterior + atual);
     },
-   async alterarCarrinho(item){
-       console.log("teste "+item._id) 
-       await axios.put(import.meta.env.VITE_APP_API_URL + "/item/"+ item._id);
-    }
+    async alterarCarrinho(item) {
+      console.log("teste " + item._id);
+      await axios.put(import.meta.env.VITE_APP_API_URL + "/item/" + item._id);
+    },
+    async remover(id) {
+      await axios.delete(import.meta.env.VITE_APP_API_URL + "/item/" + id);
+
+      this.buscarItem();
+    },
   },
   mounted() {
-   this.buscarItem();
+    this.buscarItem();
   },
   computed: {
     totalGeral() {
