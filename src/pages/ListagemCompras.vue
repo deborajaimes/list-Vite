@@ -19,10 +19,12 @@
             />
           </svg>
           <input
+            v-model="filtroDigitado"
             class="bg-gray-50 outline-none ml-1 block"
             type="text"
             name=""
             id=""
+            @input="filtrar"
             placeholder="procurar..."
           />
         </div>
@@ -112,7 +114,7 @@
           >
             carrinho
           </th>
-           <th
+          <th
             class="
               px-5
               py-3
@@ -124,9 +126,8 @@
               uppercase
               tracking-wider
             "
-          >
-          </th>
-            <th
+          ></th>
+          <th
             class="
               px-5
               py-3
@@ -138,8 +139,7 @@
               uppercase
               tracking-wider
             "
-          >
-          </th>
+          ></th>
         </tr>
       </thead>
       <tbody>
@@ -158,17 +158,35 @@
               type="checkbox"
               name="carrinho"
               id="carrinho"
-              :checked="item.carrinho"
+              v-model="item.carrinho"
               @change="alterarCarrinho(item)"
             />
           </td>
           <td>
-            <button @click="remover(item._id)" class="mdi mdi-delete-forever text-red-400 hover:text-red-500 focus:text-red-500">
+            <button
+              @click="remover(item._id)"
+              class="
+                mdi mdi-delete-forever
+                text-red-400
+                hover:text-red-500
+                focus:text-red-500
+              "
+            >
               Excluir
             </button>
           </td>
           <td>
-            <button class="mdi mdi-table-edit text-indigo-400 hover:text-indigo-500 focus:text-indigo-500">Editar</button>
+            <button
+              @click="editar(item)"
+              class="
+                mdi mdi-table-edit
+                text-indigo-400
+                hover:text-indigo-500
+                focus:text-indigo-500
+              "
+            >
+              Editar
+            </button>
           </td>
         </tr>
       </tbody>
@@ -198,7 +216,7 @@
             py-3
             border-b-2 border-gray-200
             bg-gray-100
-            text-left 
+            text-left
             font-semibold
             text-gray-600
             uppercase
@@ -225,7 +243,7 @@
         </th>
         <th
           class="
-             px-5
+            px-5
             py-3
             border-b-2 border-gray-200
             bg-gray-100
@@ -251,6 +269,8 @@ export default {
     return {
       lista: [],
       resultadoTotalCarrinho: 0,
+      filtroDigitado: "",
+      listaBKP: [],
     };
   },
   methods: {
@@ -259,6 +279,7 @@ export default {
         import.meta.env.VITE_APP_API_URL + "/item"
       );
       this.lista = resposta.data;
+      this.listaBKP = resposta.data;
       this.calcularTotalCarrinho();
     },
 
@@ -272,13 +293,33 @@ export default {
         .reduce((anterior, atual) => anterior + atual);
     },
     async alterarCarrinho(item) {
-      console.log("teste " + item._id);
-      await axios.put(import.meta.env.VITE_APP_API_URL + "/item/" + item._id);
+      console.log("teste " + item.carrinho);
+      await axios.put(
+        import.meta.env.VITE_APP_API_URL + "/item/" + item._id,
+        item
+      );
+      this.calcularTotalCarrinho();
     },
+
     async remover(id) {
       await axios.delete(import.meta.env.VITE_APP_API_URL + "/item/" + id);
 
       this.buscarItem();
+    },
+    filtrar() {
+      if (this.filtroDigitado.length > 0) {
+        this.lista = this.listaBKP.filter((elemento) => {
+          return elemento.descricao
+            .toUpperCase()
+            .includes(this.filtroDigitado.toUpperCase());
+        });
+      } else this.lista = this.listaBKP;
+    },
+    editar(item) {
+      this.$router.push({
+        name: "Lista",
+        params: { item: JSON.stringify(item) },
+      });
     },
   },
   mounted() {
@@ -290,9 +331,6 @@ export default {
       return this.lista
         .map((el) => el.valorTotal)
         .reduce((anterior, atual) => anterior + atual);
-    },
-    totalCarrinho() {
-      return this.resultadoTotalCarrinho;
     },
   },
 };

@@ -73,7 +73,7 @@
     </p>
     <br />
     <button
-      @click="adicionarItem"
+      @click="salvarItem"
       class="bg-indigo-500 px-4 rounded-md text-white mdi mdi-check"
       type="button"
     >
@@ -98,12 +98,13 @@ export default {
     };
   },
   methods: {
-    async adicionarItem() {
+    async salvarItem() {
       const resp = await axios.post(
         import.meta.env.VITE_APP_API_URL + "/item",
         this.item
       );
       alert(resp.data.mensagem);
+      this.item={}
     },
     calcularTotal() {
       this.item.valorTotal = this.item.valorUnitario * this.item.quantidade;
@@ -111,6 +112,10 @@ export default {
     cancelar() {
       this.item = {};
     },
+  },
+  mounted() {
+    console.log(this.$route.params);
+    if(this.$route.params.item) this.item = JSON.parse(this.$route.params.item);
   },
   watch: {
     "item.valorUnitario": function () {
